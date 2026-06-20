@@ -1,0 +1,14 @@
+# YOLOv8 訓練超參數設定
+# 對應 MATLAB metal.m 的訓練設定，作為起始點，待實際資料蒐集後再調整
+
+model: yolov8n.pt        # 起始權重：nano 版本，適合快速迭代與較小資料集
+epochs: 100
+batch: 16
+imgsz: 640
+optimizer: Adam          # 對應 MATLAB 階段使用的 Adam
+lr0: 0.0001               # 對應 MATLAB metal.m 的 InitialLearnRate
+patience: 20              # early stopping
+device: 0                 # GPU index，CPU 則設為 'cpu'
+
+# 訓練/驗證切分比例（資料蒐集階段決定後在 data 腳本中實作）
+val_split: 0.2

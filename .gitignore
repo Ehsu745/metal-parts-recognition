@@ -1,0 +1,23 @@
+# MATLAB 相關大型檔案（已遺失或不需上傳的部分），但留存的 .m 程式碼例外
+*.mat
+!matlab_legacy/scripts/*.m
+
+# YOLO 訓練過程的完整 runs（含中間 checkpoint），體積大，repo 只保留 python/results/ 裡的精選成果
+runs/
+*epoch*.pt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# MATLAB
+*.asv
+*.m~
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/

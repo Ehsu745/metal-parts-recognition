@@ -1,0 +1,19 @@
+# YOLOv8 資料集設定檔（Ultralytics 格式）
+# 對應 python/data/yolo_dataset/ 下實際存在的 150 張圖片與標註
+
+path: ../data/yolo_dataset   # 資料集根目錄（相對於此檔案）
+train: images/train          # 135 張
+val: images/train            # 資料量較小（135張），暫用 train 集做驗證
+                              # 待之後擴充資料量後，建議切分出獨立 val set
+test: images/test            # 15 張，僅用於最終評估，未參與訓練
+
+# 類別數與名稱：與 matlab_legacy/scripts/metal.m 的 6 類設定一致
+# 命名沿用 MATLAB groundTruth 標註欄位的原始拼寫（無底線）
+nc: 6
+names:
+  0: bolt              # 螺栓
+  1: foundationbolt     # 地腳螺栓
+  2: gasket             # 墊片
+  3: drillingscrew      # 自攻螺絲
+  4: nut                # 螺帽
+  5: screw              # 螺絲
