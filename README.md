@@ -13,10 +13,10 @@
 
 | 階段 | 內容 | 狀態 |
 |---|---|---|
-| 1. 提案 | 構想以 GoogLeNet 做影像分類，目標辨識率 80%+ | ✅ 完成（見 `matlab_legacy/proposal/`） |
-| 2. MATLAB 驗證 | 實作 Faster R-CNN 物件偵測 + GoogLeNet 分類兩種方法 | ✅ 已執行，程式碼留存；訓練資料與標註一度遺失，後於舊電腦尋回並轉換為 YOLO 格式（見下方說明） |
-| 3. Python 重構 — YOLOv8 | 改用 PyTorch + Ultralytics YOLOv8 重新訓練物件偵測模型 | ✅ **已完成訓練**，mAP50 達 99.5%（見下方「訓練成果」） |
-| 4. Python 重構 — 分類對照組 | CNN 分類（torchvision），作為與 YOLOv8 的方法比較 | 🚧 待規劃資料集 |
+| 1. 提案 | 構想以 GoogLeNet 做影像分類，目標辨識率 80%+ | 完成（見 `matlab_legacy/proposal/`） |
+| 2. MATLAB 驗證 | 實作 Faster R-CNN 物件偵測 + GoogLeNet 分類兩種方法 | 已執行，程式碼與資料集留存，後續轉換為 YOLO 格式（見下方說明） |
+| 3. Python 重構 — YOLOv8 | 改用 PyTorch + Ultralytics YOLOv8 重新訓練物件偵測模型 | 已完成訓練，mAP50 達 99.5%（見下方「訓練成果」） |
+| 4. Python 重構 — 分類對照組 | CNN 分類（torchvision），作為與 YOLOv8 的方法比較 | 待規劃資料集 |
 
 ### 為什麼方法跟提案不一致？
 
@@ -29,18 +29,17 @@
    延續提案方向；但此程式對應的資料集類別**已無法確認**是否為金屬零件
    （詳見程式說明文件），列為待確認項目。
 
-### 資料集尋回與轉換過程
+### 資料集與轉換過程
 
-MATLAB 階段使用的訓練影像（150 張）原一度遺失，後於舊電腦中找回原始壓縮檔，
-確認與提案規模完全吻合。但標註檔（`train_label.mat` / `test_label.mat`）是
-MATLAB 專屬的 `groundTruth` 物件（MCOS 序列化格式），無法用 Python 直接解析，
-因此透過 MATLAB Online（學校提供的免費雲端授權）執行展開腳本，將標註匯出為
-通用 CSV 格式，再以 Python 轉換為 YOLO 格式，並以實際疊框視覺化驗證轉換正確性
+MATLAB 階段使用的訓練影像共 150 張，與提案規模吻合。標註檔
+（`train_label.mat` / `test_label.mat`）是 MATLAB 專屬的 `groundTruth`
+物件（MCOS 序列化格式），無法用 Python 直接解析，因此透過 MATLAB Online
+（學校提供的免費雲端授權）執行展開腳本，將標註匯出為通用 CSV 格式，
+再以 Python 轉換為 YOLO 格式，並以實際疊框視覺化驗證轉換正確性
 （無錯位、類別對應無誤）。完整資料集與標註現已納入本 repo（見 `python/data/`）。
 
-預訓練的 GoogLeNet layer graph（`googLeNet_4.mat`）及其對應訓練資料夾 `new/`
-則確認已不可尋回，且該資料夾類別是否為金屬零件本身亦無法考證，
-分類對照組需重新規劃資料蒐集。
+預訓練的 GoogLeNet layer graph（`googLeNet_4.mat`）及其對應訓練資料夾
+`new/` 的類別目前無法考證是否為金屬零件，分類對照組需重新規劃資料蒐集。
 
 ---
 
@@ -110,35 +109,35 @@ results = model.predict(source="你的圖片路徑.jpg", conf=0.5)
 
 ```
 .
-├── matlab_legacy/              # MATLAB 階段
-│   ├── proposal/                # 原始提案簡報
+├── matlab_legacy/                             # MATLAB 階段
+│   ├── proposal/                              # 原始提案簡報
 │   │   └── 金屬探測.pptx
-│   └── scripts/                 # 留存程式碼 + 程式說明
-│       ├── metal.m                              # Faster R-CNN 物件偵測
-│       ├── metal_NOTES.md                       # 架構與已知缺失說明
-│       ├── googlenet_classification.m           # GoogLeNet 分類
-│       └── googlenet_classification_NOTES.md    # 架構、待確認事項說明
+│   └── scripts/                               # 留存程式碼 + 程式說明
+│       ├── metal.m                            # Faster R-CNN 物件偵測
+│       ├── metal_NOTES.md                     # 架構與已知缺失說明
+│       ├── googlenet_classification.m         # GoogLeNet 分類
+│       └── googlenet_classification_NOTES.md  # 架構、待確認事項說明
 │
-├── python/                     # Python 重構
-│   ├── src/                      # 主程式碼
-│   │   ├── train_yolo.py           # YOLOv8 訓練入口
-│   │   ├── train_classifier.py     # CNN 分類對照組（待資料集）
-│   │   └── live_demo.py            # webcam 即時辨識 demo
-│   ├── configs/                  # 訓練設定檔
-│   ├── data/                     # 資料集（150 張圖 + YOLO 標註，已納入版本控制）
+├── python/                                    # Python 重構
+│   ├── src/                                   # 主程式碼
+│   │   ├── train_yolo.py                      # YOLOv8 訓練入口
+│   │   ├── train_classifier.py                # CNN 分類對照組（待資料集）
+│   │   └── live_demo.py                       # webcam 即時辨識 demo
+│   ├── configs/                                # 訓練設定檔
+│   ├── data/                                   # 資料集（150 張圖 + YOLO 標註，已納入版本控制）
 │   │   └── yolo_dataset/
 │   │       ├── images/{train,test}/
 │   │       └── labels/{train,test}/
-│   ├── results/                  # 訓練成果
-│   │   ├── best.pt                 # 訓練好的最佳權重
-│   │   ├── results.csv             # 100 epoch 完整訓練數據
-│   │   ├── results.png             # 訓練曲線圖
-│   │   ├── confusion_matrix.png    # 混淆矩陣
-│   │   └── sample_predictions/     # 推論範例圖
-│   └── notebooks/                 # 實驗 / EDA notebook
+│   ├── results/                                # 訓練成果
+│   │   ├── best.pt                             # 訓練好的最佳權重
+│   │   ├── results.csv                         # 100 epoch 完整訓練數據
+│   │   ├── results.png                         # 訓練曲線圖
+│   │   ├── confusion_matrix.png                # 混淆矩陣
+│   │   └── sample_predictions/                 # 推論範例圖
+│   └── notebooks/                              # 實驗 / EDA notebook
 │
-├── docs/                       # 補充文件
-└── assets/                     # README 用圖片等素材
+├── docs/                                       # 補充文件
+└── assets/                                     # README 用圖片等素材
 ```
 
 ---
