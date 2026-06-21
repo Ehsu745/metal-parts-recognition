@@ -190,3 +190,9 @@ pip install -r python/requirements.txt
 
 D1102247 徐上恩 — 逢甲大學 通訊工程學系
 指導老師：陸清達
+
+---
+
+## License
+
+本專案採用 [MIT License](LICENSE) 授權。
